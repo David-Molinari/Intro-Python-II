@@ -17,7 +17,7 @@ the distance, but there is no way across the chasm."""),
     'narrow':   Room("narrow", "Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
 
-    'treasure': Room('treasure', "Treasure Chamber", """You've found the long-lost treasure
+    'treasure': Room("treasure", "Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
@@ -60,23 +60,25 @@ while True:
         break
     elif command[0] == 'n':
         # check if the player can move to the north
-        if player.location is 'outside' or 'foyer' or 'treasure':
-            player.location = room[player.location].n_to.key
-        else:
+        if player.location != 'outside' and player.location != 'foyer' and player.location != 'narrow':
             print("Invalid entry")
+        else:
+            player.location = room[player.location].n_to.key
         # if there is, set that north room as the player's location 
     elif command[0] == 's':
-        if player.location is 'overlook' or 'foyer' or 'treasure':
+        if player.location != 'overlook' and player.location != 'foyer' and player.location != 'treasure':
+            print("Invalid entry")
+        else:
             player.location = room[player.location].s_to.key
-        else:
-            print("Invalid entry")
     elif command[0] == 'e':
-        if player.location is 'foyer':
+        if player.location != 'foyer':
+            print("Invalid entry")
+        else:
             player.location = room[player.location].e_to.key
-        else:
-            print("Invalid entry")
     elif command[0] == 'w':
-        if player.location is 'narrow':
-            player.location = room[player.location].w_to.key
-        else:
+        if player.location != 'narrow':
             print("Invalid entry")
+        else:
+            player.location = room[player.location].w_to.key
+    else:
+        print("Invalid entry")
