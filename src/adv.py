@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -34,6 +35,36 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+
+# Items 
+
+items = {
+    'flashlight': Item("flashlight", """Lights up the room."""),
+    'rock': Item("rock", """A rock."""),
+    "rope": Item("rope", """A rope.""")
+}
+
+room['outside'].items.append(items['flashlight'])
+room['foyer'].items.append(items['rock'])
+room['treasure'].items.append(items['rope'])
+
+
+def room_item_remover(command):
+    for i in room[player.location].items:
+        counter = -1
+        counter = counter + 1
+        if i.name == command:
+            del(room[player.location].items[counter])
+
+def player_item_remover(command):
+    for i in player.items:
+        counter = -1
+        counter = counter + 1
+        if i == command:
+            del(player.items[counter])
+
+
+
 #
 # Main
 #
@@ -50,6 +81,7 @@ while True:
     # * Waits for user input and decides what to do.
     print(room[player.location].description)
     #
+    room[player.location].print_items()
     # If the user enters a cardinal direction, attempt to move to the room there.
     # Print an error message if the movement isn't allowed.
     #
@@ -80,5 +112,11 @@ while True:
             print("Invalid entry")
         else:
             player.location = room[player.location].w_to.key
+    elif command[0][:3] == 'get':
+        player.items.append(items[command[0][4:]])
+        room_item_remover(command[0][4:])
+    elif command[0][:4] == 'drop':
+        player_item_remover(command[0][5:])
+        room[player.location].items.append(items[command[0][5:]])
     else:
         print("Invalid entry")
